@@ -141,9 +141,6 @@ class MapPickerState extends State<MapPicker> {
       if (_currentPosition == null) _initCurrentLocation();
     }
 
-    if (_currentPosition != null && dialogOpen != null)
-      Navigator.of(context, rootNavigator: true).pop();
-
     return Scaffold(
       body: Builder(
         builder: (context) {
@@ -214,7 +211,7 @@ class MapPickerState extends State<MapPicker> {
     return Align(
       alignment: widget.resultCardAlignment ?? Alignment.bottomCenter,
       child: Padding(
-        padding: widget.resultCardPadding ?? EdgeInsets.all(16.0),
+        padding: widget.resultCardPadding ?? EdgeInsets.all(5.0),
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: Consumer<LocationProvider>(
@@ -242,24 +239,10 @@ class MapPickerState extends State<MapPicker> {
                           _address ??
                               S.of(context)?.unnamedPlace ??
                               'Unnamed place',
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 12),
                         );
                       },
                     ),
-                  ),
-                  Spacer(),
-                  FloatingActionButton(
-                    onPressed: () {
-                      Navigator.of(context).pop({
-                        'location': LocationResult(
-                          latLng: locationProvider.lastIdleLocation,
-                          address: _address,
-                          placeId: _placeId,
-                        )
-                      });
-                    },
-                    child: widget.resultCardConfirmIcon ??
-                        Icon(Icons.arrow_forward),
                   ),
                 ],
               ),
@@ -336,10 +319,6 @@ class MapPickerState extends State<MapPicker> {
         geolocationStatus == LocationPermission.always) {
       d('GeolocationStatus.granted');
 
-      if (dialogOpen != null) {
-        Navigator.of(context, rootNavigator: true).pop();
-        dialogOpen = null;
-      }
     }
   }
 
@@ -350,8 +329,6 @@ class MapPickerState extends State<MapPicker> {
       builder: (context) {
         return WillPopScope(
           onWillPop: () async {
-            Navigator.of(context, rootNavigator: true).pop();
-            Navigator.of(context, rootNavigator: true).pop();
             return true;
           },
           child: AlertDialog(
@@ -364,7 +341,6 @@ class MapPickerState extends State<MapPicker> {
               FlatButton(
                 child: Text(S.of(context)?.ok ?? 'Ok'),
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
                   _initCurrentLocation();
                   dialogOpen = null;
                 },
@@ -383,8 +359,6 @@ class MapPickerState extends State<MapPicker> {
       builder: (context) {
         return WillPopScope(
           onWillPop: () async {
-            Navigator.of(context, rootNavigator: true).pop();
-            Navigator.of(context, rootNavigator: true).pop();
             return true;
           },
           child: AlertDialog(
@@ -398,8 +372,6 @@ class MapPickerState extends State<MapPicker> {
               FlatButton(
                 child: Text(S.of(context)?.ok ?? 'Ok'),
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  openAppSettings();
                   dialogOpen = null;
                 },
               ),
@@ -433,7 +405,6 @@ class MapPickerState extends State<MapPicker> {
                         action: 'android.settings.LOCATION_SOURCE_SETTINGS');
 
                     intent.launch();
-                    Navigator.of(context, rootNavigator: true).pop();
                   },
                 ),
               ],
