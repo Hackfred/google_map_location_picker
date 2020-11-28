@@ -40,6 +40,7 @@ class LocationPicker extends StatefulWidget {
     this.countries,
     this.language,
     this.desiredAccuracy,
+    this.onValueUpdate,
   });
 
   final String apiKey;
@@ -64,6 +65,8 @@ class LocationPicker extends StatefulWidget {
   final EdgeInsets resultCardPadding;
 
   final String language;
+
+  final Function onValueUpdate;
 
   final LocationAccuracy desiredAccuracy;
 
@@ -162,15 +165,14 @@ class LocationPickerState extends State<LocationPicker> {
         ? "&components=country:${countries.sublist(0, min(countries.length, 5)).join('|country:')}"
         : "";
 
-    var endpoint =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json?" +
-            "key=${widget.apiKey}&" +
-            "input={$place}$regionParam&sessiontoken=$sessionToken&" +
-            "language=${widget.language}";
+    var endpoint = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" +
+        "key=${widget.apiKey}&" +
+        "input={$place}$regionParam&sessiontoken=$sessionToken&" +
+        "language=${widget.language}";
 
     if (locationResult != null) {
-      endpoint += "&location=${locationResult.latLng.latitude}," +
-          "${locationResult.latLng.longitude}";
+      endpoint +=
+          "&location=${locationResult.latLng.latitude}," + "${locationResult.latLng.longitude}";
     }
 
     LocationUtils.getAppHeaders()
@@ -226,8 +228,7 @@ class LocationPickerState extends State<LocationPicker> {
         .then((headers) => http.get(endpoint, headers: headers))
         .then((response) {
       if (response.statusCode == 200) {
-        Map<String, dynamic> location =
-            jsonDecode(response.body)['result']['geometry']['location'];
+        Map<String, dynamic> location = jsonDecode(response.body)['result']['geometry']['location'];
 
         LatLng latLng = LatLng(location['lat'], location['lng']);
 
@@ -295,8 +296,7 @@ class LocationPickerState extends State<LocationPicker> {
         .then((response) {
       if (response.statusCode == 200) {
         nearbyPlaces.clear();
-        for (Map<String, dynamic> item
-            in jsonDecode(response.body)['results']) {
+        for (Map<String, dynamic> item in jsonDecode(response.body)['results']) {
           NearbyPlace nearbyPlace = NearbyPlace();
 
           nearbyPlace.name = item['name'];
@@ -340,8 +340,7 @@ class LocationPickerState extends State<LocationPicker> {
         road = 'REQUEST DENIED = please see log for more details';
         print(responseJson['error_message']);
       } else {
-        road =
-            responseJson['results'][0]['address_components'][0]['short_name'];
+        road = responseJson['results'][0]['address_components'][0]['short_name'];
       }
 
 //      String locality =
@@ -390,6 +389,7 @@ class LocationPickerState extends State<LocationPicker> {
       child: Builder(builder: (context) {
         return Scaffold(
           extendBodyBehindAppBar: true,
+          /*
           appBar: AppBar(
             iconTheme: Theme.of(context).iconTheme,
             elevation: 0,
@@ -401,7 +401,7 @@ class LocationPickerState extends State<LocationPicker> {
               boxDecoration: widget.searchBarBoxDecoration,
               hintText: widget.hintText,
             ),
-          ),
+          ),*/
           body: MapPicker(
             widget.apiKey,
             initialCenter: widget.initialCenter,
@@ -409,8 +409,7 @@ class LocationPickerState extends State<LocationPicker> {
             requiredGPS: widget.requiredGPS,
             myLocationButtonEnabled: widget.myLocationButtonEnabled,
             layersButtonEnabled: widget.layersButtonEnabled,
-            automaticallyAnimateToCurrentLocation:
-                widget.automaticallyAnimateToCurrentLocation,
+            automaticallyAnimateToCurrentLocation: widget.automaticallyAnimateToCurrentLocation,
             mapStylePath: widget.mapStylePath,
             appBarColor: widget.appBarColor,
             searchBarBoxDecoration: widget.searchBarBoxDecoration,
@@ -422,6 +421,7 @@ class LocationPickerState extends State<LocationPicker> {
             key: mapKey,
             language: widget.language,
             desiredAccuracy: widget.desiredAccuracy,
+            onValueUpdate: widget.onValueUpdate,
           ),
         );
       }),
@@ -471,8 +471,7 @@ Future<LocationResult> showLocationPicker(
           requiredGPS: requiredGPS,
           myLocationButtonEnabled: myLocationButtonEnabled,
           layersButtonEnabled: layersButtonEnabled,
-          automaticallyAnimateToCurrentLocation:
-              automaticallyAnimateToCurrentLocation,
+          automaticallyAnimateToCurrentLocation: automaticallyAnimateToCurrentLocation,
           mapStylePath: mapStylePath,
           appBarColor: appBarColor,
           hintText: hintText,
