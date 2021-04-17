@@ -1,12 +1,10 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Users\Kelln\Desktop\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\Kelln\Desktop\personal\programming\google_map_location_picker\example"
-export "FLUTTER_TARGET=lib\main.dart"
+export "FLUTTER_ROOT=/Users/hackfred/personal/programming/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/hackfred/personal/programming/google_map_location_picker/example"
+export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
-export "SYMROOT=${SOURCE_ROOT}/../build\ios"
-export "OTHER_LDFLAGS=$(inherited) -framework Flutter"
-export "FLUTTER_FRAMEWORK_DIR=C:\Users\Kelln\Desktop\flutter\bin\cache\artifacts\engine\ios"
+export "SYMROOT=${SOURCE_ROOT}/../build/ios"
 export "FLUTTER_BUILD_NAME=1.0.0"
 export "FLUTTER_BUILD_NUMBER=1.0.0"
 export "DART_OBFUSCATION=false"
